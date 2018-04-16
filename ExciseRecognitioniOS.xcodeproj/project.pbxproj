@@ -1,0 +1,387 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		202486511F3AE20500CD12E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 202486501F3AE20500CD12E6 /* AppDelegate.swift */; };
+		202486531F3AE20500CD12E6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 202486521F3AE20500CD12E6 /* ViewController.swift */; };
+		202486561F3AE20500CD12E6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 202486541F3AE20500CD12E6 /* Main.storyboard */; };
+		202486581F3AE20500CD12E6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 202486571F3AE20500CD12E6 /* Assets.xcassets */; };
+		2024865B1F3AE20500CD12E6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 202486591F3AE20500CD12E6 /* LaunchScreen.storyboard */; };
+		204D7D101F3C326800209923 /* libstdc++.6.0.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 20A7BF921F3B259100854C42 /* libstdc++.6.0.9.tbd */; };
+		204D7D111F3C327000209923 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20A7BF931F3B259800854C42 /* CoreImage.framework */; };
+		20A7BF891F3AE91200854C42 /* Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20A7BF881F3AE91200854C42 /* Preview.swift */; };
+		20A7BF901F3B255000854C42 /* Dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 20A7BF8F1F3B255000854C42 /* Dummy.m */; };
+		20A7BF911F3B257100854C42 /* TesseractOCR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20A7BF8C1F3B250A00854C42 /* TesseractOCR.framework */; };
+		64E9ADE81F2A2436007BAC6F /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = 64E9ADE71F2A2436007BAC6F /* tessdata */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		2024864D1F3AE20500CD12E6 /* ExciseRecognitioniOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExciseRecognitioniOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		202486501F3AE20500CD12E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		202486521F3AE20500CD12E6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		202486551F3AE20500CD12E6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		202486571F3AE20500CD12E6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2024865A1F3AE20500CD12E6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		2024865C1F3AE20500CD12E6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		20A7BF881F3AE91200854C42 /* Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preview.swift; sourceTree = "<group>"; };
+		20A7BF8C1F3B250A00854C42 /* TesseractOCR.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TesseractOCR.framework; sourceTree = "<group>"; };
+		20A7BF8D1F3B254F00854C42 /* ExciseRecognitioniOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ExciseRecognitioniOS-Bridging-Header.h"; sourceTree = "<group>"; };
+		20A7BF8E1F3B255000854C42 /* Dummy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Dummy.h; sourceTree = "<group>"; };
+		20A7BF8F1F3B255000854C42 /* Dummy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Dummy.m; sourceTree = "<group>"; };
+		20A7BF921F3B259100854C42 /* libstdc++.6.0.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.0.9.tbd"; path = "usr/lib/libstdc++.6.0.9.tbd"; sourceTree = SDKROOT; };
+		20A7BF931F3B259800854C42 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		64E9ADE71F2A2436007BAC6F /* tessdata */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tessdata; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2024864A1F3AE20500CD12E6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				20A7BF911F3B257100854C42 /* TesseractOCR.framework in Frameworks */,
+				204D7D111F3C327000209923 /* CoreImage.framework in Frameworks */,
+				204D7D101F3C326800209923 /* libstdc++.6.0.9.tbd in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		202486441F3AE20500CD12E6 = {
+			isa = PBXGroup;
+			children = (
+				20A7BF8C1F3B250A00854C42 /* TesseractOCR.framework */,
+				2024864F1F3AE20500CD12E6 /* ExciseRecognitioniOS */,
+				2024864E1F3AE20500CD12E6 /* Products */,
+				20A7BF8A1F3B243800854C42 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		2024864E1F3AE20500CD12E6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2024864D1F3AE20500CD12E6 /* ExciseRecognitioniOS.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2024864F1F3AE20500CD12E6 /* ExciseRecognitioniOS */ = {
+			isa = PBXGroup;
+			children = (
+				64E9ADE71F2A2436007BAC6F /* tessdata */,
+				202486501F3AE20500CD12E6 /* AppDelegate.swift */,
+				202486521F3AE20500CD12E6 /* ViewController.swift */,
+				202486541F3AE20500CD12E6 /* Main.storyboard */,
+				202486571F3AE20500CD12E6 /* Assets.xcassets */,
+				202486591F3AE20500CD12E6 /* LaunchScreen.storyboard */,
+				2024865C1F3AE20500CD12E6 /* Info.plist */,
+				20A7BF881F3AE91200854C42 /* Preview.swift */,
+				20A7BF8E1F3B255000854C42 /* Dummy.h */,
+				20A7BF8F1F3B255000854C42 /* Dummy.m */,
+				20A7BF8D1F3B254F00854C42 /* ExciseRecognitioniOS-Bridging-Header.h */,
+			);
+			path = ExciseRecognitioniOS;
+			sourceTree = "<group>";
+		};
+		20A7BF8A1F3B243800854C42 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				20A7BF931F3B259800854C42 /* CoreImage.framework */,
+				20A7BF921F3B259100854C42 /* libstdc++.6.0.9.tbd */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2024864C1F3AE20500CD12E6 /* ExciseRecognitioniOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2024865F1F3AE20500CD12E6 /* Build configuration list for PBXNativeTarget "ExciseRecognitioniOS" */;
+			buildPhases = (
+				202486491F3AE20500CD12E6 /* Sources */,
+				2024864A1F3AE20500CD12E6 /* Frameworks */,
+				2024864B1F3AE20500CD12E6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ExciseRecognitioniOS;
+			productName = SceneTextRecognitioniOS;
+			productReference = 2024864D1F3AE20500CD12E6 /* ExciseRecognitioniOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		202486451F3AE20500CD12E6 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0900;
+				LastUpgradeCheck = 0900;
+				ORGANIZATIONNAME = devcrew;
+				TargetAttributes = {
+					2024864C1F3AE20500CD12E6 = {
+						CreatedOnToolsVersion = 9.0;
+						LastSwiftMigration = 0900;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 202486481F3AE20500CD12E6 /* Build configuration list for PBXProject "ExciseRecognitioniOS" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 202486441F3AE20500CD12E6;
+			productRefGroup = 2024864E1F3AE20500CD12E6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2024864C1F3AE20500CD12E6 /* ExciseRecognitioniOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		2024864B1F3AE20500CD12E6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2024865B1F3AE20500CD12E6 /* LaunchScreen.storyboard in Resources */,
+				202486581F3AE20500CD12E6 /* Assets.xcassets in Resources */,
+				202486561F3AE20500CD12E6 /* Main.storyboard in Resources */,
+				64E9ADE81F2A2436007BAC6F /* tessdata in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		202486491F3AE20500CD12E6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				202486531F3AE20500CD12E6 /* ViewController.swift in Sources */,
+				20A7BF891F3AE91200854C42 /* Preview.swift in Sources */,
+				20A7BF901F3B255000854C42 /* Dummy.m in Sources */,
+				202486511F3AE20500CD12E6 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		202486541F3AE20500CD12E6 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				202486551F3AE20500CD12E6 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		202486591F3AE20500CD12E6 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2024865A1F3AE20500CD12E6 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		2024865D1F3AE20500CD12E6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		2024865E1F3AE20500CD12E6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		202486601F3AE20500CD12E6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = BXR4XXCGV4;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/ExciseRecognitioniOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "-lstdc++";
+				PRODUCT_BUNDLE_IDENTIFIER = com.wipon.recognition;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "ExciseRecognitioniOS/ExciseRecognitioniOS-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		202486611F3AE20500CD12E6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = BXR4XXCGV4;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/ExciseRecognitioniOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "-lstdc++";
+				PRODUCT_BUNDLE_IDENTIFIER = com.wipon.recognition;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "ExciseRecognitioniOS/ExciseRecognitioniOS-Bridging-Header.h";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		202486481F3AE20500CD12E6 /* Build configuration list for PBXProject "ExciseRecognitioniOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2024865D1F3AE20500CD12E6 /* Debug */,
+				2024865E1F3AE20500CD12E6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2024865F1F3AE20500CD12E6 /* Build configuration list for PBXNativeTarget "ExciseRecognitioniOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				202486601F3AE20500CD12E6 /* Debug */,
+				202486611F3AE20500CD12E6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 202486451F3AE20500CD12E6 /* Project object */;
+}
