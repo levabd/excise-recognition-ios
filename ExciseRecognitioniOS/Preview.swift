@@ -1,11 +1,3 @@
-//
-//  Preview.swift
-//  SceneTextRecognitioniOS
-//
-//  Created by Khurram Shehzad on 09/08/2017.
-//  Copyright © 2017 devcrew. All rights reserved.
-//
-
 import UIKit
 import AVFoundation
 class PreviewView: UIView {

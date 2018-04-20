@@ -24,6 +24,8 @@
 	<string>Recognize Scene Text</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
+    <key>UIFileSharingEnabled</key>
+    <true/>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UIRequiredDeviceCapabilities</key>
