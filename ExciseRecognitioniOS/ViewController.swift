@@ -11,9 +11,9 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        tesseract?.pageSegmentationMode = .sparseText
-        tesseract?.charWhitelist = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890()-+*!/?.,@#$%&"
+        
+        tesseract?.pageSegmentationMode = .singleChar
+        tesseract?.charWhitelist = "1234567890OoZzATSsgDpeBbGtaXq"
         if isAuthorized() {
             configureTextDetection()
             configureCamera()
@@ -89,38 +89,20 @@ class ViewController: UIViewController {
                     layer.removeFromSuperlayer()
                 }
             }
-            let viewWidth = self.view.frame.size.width
-            let viewHeight = self.view.frame.size.height
-            
+           
             self.drawROI()
             
             for result in textResults {
 
                 if let textResult = result {
-                    
-                    let layer = CALayer()
-                    var rect = textResult.boundingBox
-                    
-                    /*
-                    
-                    // for normal orientation
-                    rect.origin.x *= viewWidth
-                    rect.size.height *= viewHeight
-                    rect.origin.y = ((1 - rect.origin.y) * viewHeight) - rect.size.height
-                    rect.size.width *= viewWidth
-                    
-                    */
-                    
-                    let recognizedRect = textResult.boundingBox
-                    rect.origin.x = (1 - recognizedRect.origin.y - recognizedRect.size.height) * viewWidth
-                    rect.size.height = recognizedRect.size.width * viewHeight
-                    rect.origin.y = (1 - recognizedRect.origin.x - recognizedRect.size.width) * viewHeight
-                    rect.size.width = recognizedRect.size.height * viewWidth
-
-                    layer.frame = rect
-                    layer.borderWidth = 2
-                    layer.borderColor = UIColor.red.cgColor
-                    self.view.layer.addSublayer(layer)
+                    // Draw detected region
+                    self.drawDetectedRegion(recognizedRect: textResult.boundingBox, borderColor: UIColor.red.cgColor)
+                    if let boxes = textResult.characterBoxes {
+                        for characterBox in boxes {
+                            // Draw Character region
+                            self.drawDetectedRegion(recognizedRect: characterBox.boundingBox, borderColor: UIColor.blue.cgColor)
+                        }
+                    }
                 }
             }
         }
@@ -184,7 +166,36 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         }
     }
     
-    func drawROI(){
+    func drawDetectedRegion(recognizedRect: CGRect, borderColor: CGColor) {
+        
+        let viewWidth = self.view.frame.size.width
+        let viewHeight = self.view.frame.size.height
+        
+        let layer = CALayer()
+        
+        /*
+         
+         // for normal orientation
+         rect.origin.x *= viewWidth
+         rect.size.height *= viewHeight
+         rect.origin.y = ((1 - rect.origin.y) * viewHeight) - rect.size.height
+         rect.size.width *= viewWidth
+         
+         */
+        
+        let rect = CGRect(
+            x: (1 - recognizedRect.origin.y - recognizedRect.size.height) * viewWidth,
+            y: (1 - recognizedRect.origin.x - recognizedRect.size.width) * viewHeight,
+            width: recognizedRect.size.height * viewWidth,
+            height: recognizedRect.size.width * viewHeight)
+        
+        layer.frame = rect
+        layer.borderWidth = 2
+        layer.borderColor = borderColor
+        self.view.layer.addSublayer(layer)
+    }
+    
+    func drawROI() {
         let viewWidth = self.view.frame.size.width
         let viewHeight = self.view.frame.size.height
         
@@ -200,6 +211,33 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         ROIlayer.borderWidth = 2
         ROIlayer.borderColor = UIColor.white.cgColor
         self.view.layer.addSublayer(ROIlayer)
+    }
+    
+    func replaceFalseOccurence(input: String) -> String{
+        // Optional
+        var resultString = input.replacingOccurrences(of: "O", with: "0", options: .literal, range: nil)
+        resultString = input.replacingOccurrences(of: "o", with: "0", options: .literal, range: nil)
+        resultString = input.replacingOccurrences(of: "Z", with: "7", options: .literal, range: nil)
+        resultString = input.replacingOccurrences(of: "z", with: "7", options: .literal, range: nil)
+        resultString = input.replacingOccurrences(of: "A", with: "4", options: .literal, range: nil)
+        resultString = input.replacingOccurrences(of: "T", with: "7", options: .literal, range: nil)
+        resultString = input.replacingOccurrences(of: "S", with: "5", options: .literal, range: nil)
+        resultString = input.replacingOccurrences(of: "s", with: "5", options: .literal, range: nil)
+        resultString = input.replacingOccurrences(of: "g", with: "9", options: .literal, range: nil)
+        resultString = input.replacingOccurrences(of: "D", with: "0", options: .literal, range: nil)
+        resultString = input.replacingOccurrences(of: "p", with: "0", options: .literal, range: nil)
+        resultString = input.replacingOccurrences(of: "e", with: "8", options: .literal, range: nil)
+        resultString = input.replacingOccurrences(of: "B", with: "8", options: .literal, range: nil)
+        resultString = input.replacingOccurrences(of: "b", with: "6", options: .literal, range: nil)
+        resultString = input.replacingOccurrences(of: "G", with: "6", options: .literal, range: nil)
+        
+        // Very optional
+        resultString = input.replacingOccurrences(of: "t", with: "1", options: .literal, range: nil)
+        resultString = input.replacingOccurrences(of: "a", with: "4", options: .literal, range: nil)
+        resultString = input.replacingOccurrences(of: "X", with: "7", options: .literal, range: nil)
+        resultString = input.replacingOccurrences(of: "q", with: "4", options: .literal, range: nil)
+        
+        return resultString
     }
     
     // Camera Delegate and Setup
@@ -237,35 +275,41 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
             guard let rects = textObservation.characterBoxes else {
                 continue
             }
-            var xMin = CGFloat.greatestFiniteMagnitude
+            /*var xMin = CGFloat.greatestFiniteMagnitude
             var xMax: CGFloat = 0
             var yMin = CGFloat.greatestFiniteMagnitude
-            var yMax: CGFloat = 0
+            var yMax: CGFloat = 0*/
             for rect in rects {
                 
-                xMin = min(xMin, rect.bottomLeft.x)
+                /*xMin = min(xMin, rect.bottomLeft.x)
                 xMax = max(xMax, rect.bottomRight.x)
                 yMin = min(yMin, rect.bottomRight.y)
-                yMax = max(yMax, rect.topRight.y)
+                yMax = max(yMax, rect.topRight.y)*/
+                
+                let imageRect = CGRect(
+                    x: rect.bottomLeft.x * size.width,
+                    y: rect.bottomRight.y * size.height,
+                    width: (rect.bottomRight.x - rect.bottomLeft.x) * size.width,
+                    height: (rect.topRight.y - rect.bottomRight.y) * size.height)
+                let context = CIContext(options: nil)
+                guard let cgImage = context.createCGImage(ciImage, from: imageRect) else {
+                    continue
+                }
+                let uiImage = UIImage(cgImage: cgImage)
+                tesseract?.image = uiImage
+                tesseract?.recognize()
+                guard var text = tesseract?.recognizedText else {
+                    continue
+                }
+                text = text.trimmingCharacters(in: CharacterSet.newlines)
+                text = replaceFalseOccurence(input: text)
+                if !text.isEmpty {
+                    recognizedText.append(text)
+                }
+                
+                // TODO: For saving images
+                //saveImage(inputCI: imageCandidate, mock: false)
             }
-            let imageRect = CGRect(x: xMin * size.width, y: yMin * size.height, width: (xMax - xMin) * size.width, height: (yMax - yMin) * size.height)
-            let context = CIContext(options: nil)
-            guard let cgImage = context.createCGImage(ciImage, from: imageRect) else {
-                continue
-            }
-            let uiImage = UIImage(cgImage: cgImage)
-            tesseract?.image = uiImage
-            tesseract?.recognize()
-            guard var text = tesseract?.recognizedText else {
-                continue
-            }
-            text = text.trimmingCharacters(in: CharacterSet.newlines)
-            if !text.isEmpty {
-                recognizedText.append(text)
-            }
-            
-            // TODO: For saving images
-            saveImage(inputCI: imageCandidate, mock: false)
         }
         textObservations.removeAll()
         DispatchQueue.main.async {
