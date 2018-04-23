@@ -1,26 +1,66 @@
 import AVFoundation
 import UIKit
 import Vision
+//import GPUImage
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, G8TesseractDelegate {
     
     private var textDetectionRequest: VNDetectTextRectanglesRequest?
-    private let session = AVCaptureSession()
     private var textObservations = [VNTextObservation]()
-    private var tesseract = G8Tesseract(language: "eng", engineMode: .tesseractOnly)
-
+    private var tesseract = G8Tesseract(language: "eng", engineMode: .tesseractOnly) // <-- Fatest
+    // private var tesseract = G8Tesseract(language: "eng", engineMode: .tesseractCubeCombined) // <-- Most Accurate in docs but not accurate at all in real life
+    private var recognizerEnabled = true
+    private let session = AVCaptureSession()
+    private let numberVerifier = ExciseStohasticVerifier(minimumCandidatesCount: 3, bottomProbabilityThreshold: 0.4)
+    
+    /*func preprocessedImage(for tesseract: G8Tesseract?, sourceImage: UIImage?) -> UIImage? {
+        // sourceImage is the same image you sent to Tesseract above
+        let inputImage: UIImage? = sourceImage
+        // Initialize our adaptive threshold filter
+        let stillImageFilter = GPUImageAdaptiveThresholdFilter()
+        stillImageFilter.blurRadiusInPixels = 4.0
+        // adjust this to tweak the blur radius of the filter, defaults to 4.0
+        // Retrieve the filtered image from the filter
+        let filteredImage: UIImage? = stillImageFilter.image(byFilteringImage: inputImage)
+        // Give the filteredImage to Tesseract instead of the original one,
+        // allowing us to bypass the internal thresholding step.
+        // filteredImage will be sent immediately to the recognition step
+        return filteredImage
+    }*/
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tapped))
+        tap.numberOfTapsRequired = 1
+        view.addGestureRecognizer(tap)
+        
+        let doubleTap = UITapGestureRecognizer(target: self, action: #selector(doubleTapped))
+        doubleTap.numberOfTapsRequired = 2
+        view.addGestureRecognizer(doubleTap)
+        
+        tap.require(toFail: doubleTap)
+        
         tesseract?.pageSegmentationMode = .singleChar
-        tesseract?.charWhitelist = "1234567890OoZzATSsgDpeBbGtaXq"
+        // tesseract?.charWhitelist = "1234567890OoZzATSsgDpeBbGtaXq"
+        tesseract?.charWhitelist = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890()-+*!/?.,@#$%&"
+        //tesseract?.delegate = self
         if isAuthorized() {
             configureTextDetection()
             configureCamera()
         }
-        
     }
-
+    
+    @objc func doubleTapped() {
+        recognizerEnabled = !recognizerEnabled
+        print("Play/Pause")
+    }
+    
+    @objc func tapped() {
+        numberVerifier.clearAccumulator()
+        print("Accumulator cleared. Current result: \(numberVerifier.lastAddedNumber())")
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -68,6 +108,10 @@ class ViewController: UIViewController {
     
     private func handleDetection(request: VNRequest, error: Error?) {
         
+        if (!recognizerEnabled) {
+            return
+        }
+        
         guard let detectionResults = request.results else {
             print("No detection results")
             return
@@ -78,6 +122,7 @@ class ViewController: UIViewController {
         if textResults.isEmpty {
             return
         }
+        
         textObservations = textResults as! [VNTextObservation]
         DispatchQueue.main.async {
             
@@ -135,27 +180,26 @@ class ViewController: UIViewController {
 
 extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     
-    func saveImage(inputCI: CIImage, mock: Bool) {
+    // Convert from CIImage to UIImage
+    func convert(cimage: CIImage) -> UIImage
+    {
+        let context:CIContext = CIContext.init(options: nil)
+        let cgImage:CGImage = context.createCGImage(cimage, from: cimage.extent)!
+        let image:UIImage = UIImage.init(cgImage: cgImage)
+        return image
+    }
+    
+    func saveImage(image: UIImage, mock: Bool, name: String) {
         if (mock){
             return
-        }
-        
-        // Convert from CIImage to UIImage
-        func convert(cimage: CIImage) -> UIImage
-        {
-            let context:CIContext = CIContext.init(options: nil)
-            let cgImage:CGImage = context.createCGImage(cimage, from: cimage.extent)!
-            let image:UIImage = UIImage.init(cgImage: cgImage)
-            return image
         }
         
         do {
             // Define the specific path, image name
             let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!
             // create a name for your image
-            let fileURL = documentsDirectoryURL.appendingPathComponent("image.jpg")
+            let fileURL = documentsDirectoryURL.appendingPathComponent(name)
             
-            let image = convert(cimage: inputCI) // imgviewQRcode is UIImageView
             if !FileManager.default.fileExists(atPath: fileURL.path)
             {
                 try UIImageJPEGRepresentation(image, 1.0)?.write(to: fileURL, options: .atomic)
@@ -172,16 +216,6 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         let viewHeight = self.view.frame.size.height
         
         let layer = CALayer()
-        
-        /*
-         
-         // for normal orientation
-         rect.origin.x *= viewWidth
-         rect.size.height *= viewHeight
-         rect.origin.y = ((1 - rect.origin.y) * viewHeight) - rect.size.height
-         rect.size.width *= viewWidth
-         
-         */
         
         let rect = CGRect(
             x: (1 - recognizedRect.origin.y - recognizedRect.size.height) * viewWidth,
@@ -211,31 +245,58 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         ROIlayer.borderWidth = 2
         ROIlayer.borderColor = UIColor.white.cgColor
         self.view.layer.addSublayer(ROIlayer)
+        
+        let textLayer = CATextLayer()
+        textLayer.backgroundColor = UIColor.clear.cgColor
+        let textRect = CGRect(
+            origin: CGPoint(x: viewWidth * 0.02, y: viewHeight * 0.02),
+            size: CGSize(width: viewWidth * 0.98, height: viewHeight * 0.1)
+        )
+        
+        textLayer.frame = textRect
+        textLayer.string = self.recognizerEnabled ? "Recognized Enabled" : "Recognized Disabled"
+        textLayer.foregroundColor = UIColor.magenta.cgColor
+        self.view.layer.addSublayer(textLayer)
+        
+        let answerLayer = CATextLayer()
+        answerLayer.backgroundColor = UIColor.clear.cgColor
+        let answerRect = CGRect(
+            origin: CGPoint(x: viewWidth * 0.02, y: viewHeight * 0.14),
+            size: CGSize(width: viewWidth * 0.98, height: viewHeight * 0.1)
+        )
+        
+        answerLayer.frame = answerRect
+        answerLayer.string = self.numberVerifier.calculatePossibleNumber()
+        answerLayer.foregroundColor = UIColor.green.cgColor
+        self.view.layer.addSublayer(answerLayer)
     }
     
     func replaceFalseOccurence(input: String) -> String{
+        // Required
+        var resultString = input.replacingOccurrences(of: " ", with: "", options: .literal, range: nil)
+        
         // Optional
-        var resultString = input.replacingOccurrences(of: "O", with: "0", options: .literal, range: nil)
-        resultString = input.replacingOccurrences(of: "o", with: "0", options: .literal, range: nil)
-        resultString = input.replacingOccurrences(of: "Z", with: "7", options: .literal, range: nil)
-        resultString = input.replacingOccurrences(of: "z", with: "7", options: .literal, range: nil)
-        resultString = input.replacingOccurrences(of: "A", with: "4", options: .literal, range: nil)
-        resultString = input.replacingOccurrences(of: "T", with: "7", options: .literal, range: nil)
-        resultString = input.replacingOccurrences(of: "S", with: "5", options: .literal, range: nil)
-        resultString = input.replacingOccurrences(of: "s", with: "5", options: .literal, range: nil)
-        resultString = input.replacingOccurrences(of: "g", with: "9", options: .literal, range: nil)
-        resultString = input.replacingOccurrences(of: "D", with: "0", options: .literal, range: nil)
-        resultString = input.replacingOccurrences(of: "p", with: "0", options: .literal, range: nil)
-        resultString = input.replacingOccurrences(of: "e", with: "8", options: .literal, range: nil)
-        resultString = input.replacingOccurrences(of: "B", with: "8", options: .literal, range: nil)
-        resultString = input.replacingOccurrences(of: "b", with: "6", options: .literal, range: nil)
-        resultString = input.replacingOccurrences(of: "G", with: "6", options: .literal, range: nil)
+        /*resultString = resultString.replacingOccurrences(of: "O", with: "0", options: .literal, range: nil)
+        resultString = resultString.replacingOccurrences(of: "o", with: "0", options: .literal, range: nil)
+        resultString = resultString.replacingOccurrences(of: "Z", with: "7", options: .literal, range: nil)
+        resultString = resultString.replacingOccurrences(of: "z", with: "7", options: .literal, range: nil)
+        resultString = resultString.replacingOccurrences(of: "A", with: "4", options: .literal, range: nil)
+        resultString = resultString.replacingOccurrences(of: "T", with: "7", options: .literal, range: nil)
+        resultString = resultString.replacingOccurrences(of: "S", with: "5", options: .literal, range: nil)
+        resultString = resultString.replacingOccurrences(of: "s", with: "5", options: .literal, range: nil)
+        resultString = resultString.replacingOccurrences(of: "g", with: "9", options: .literal, range: nil)
+        resultString = resultString.replacingOccurrences(of: "D", with: "0", options: .literal, range: nil)
+        resultString = resultString.replacingOccurrences(of: "p", with: "0", options: .literal, range: nil)
+        resultString = resultString.replacingOccurrences(of: "e", with: "8", options: .literal, range: nil)
+        resultString = resultString.replacingOccurrences(of: "B", with: "8", options: .literal, range: nil)
+        resultString = resultString.replacingOccurrences(of: "b", with: "6", options: .literal, range: nil)
+        resultString = resultString.replacingOccurrences(of: "G", with: "6", options: .literal, range: nil)
         
         // Very optional
-        resultString = input.replacingOccurrences(of: "t", with: "1", options: .literal, range: nil)
-        resultString = input.replacingOccurrences(of: "a", with: "4", options: .literal, range: nil)
-        resultString = input.replacingOccurrences(of: "X", with: "7", options: .literal, range: nil)
-        resultString = input.replacingOccurrences(of: "q", with: "4", options: .literal, range: nil)
+        resultString = resultString.replacingOccurrences(of: "t", with: "1", options: .literal, range: nil)
+        resultString = resultString.replacingOccurrences(of: "a", with: "4", options: .literal, range: nil)
+        resultString = resultString.replacingOccurrences(of: "X", with: "7", options: .literal, range: nil)
+        resultString = resultString.replacingOccurrences(of: "q", with: "4", options: .literal, range: nil)*/
         
         return resultString
     }
@@ -243,7 +304,9 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     // Camera Delegate and Setup
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         
-        drawROI()
+        DispatchQueue.main.async {
+            self.drawROI()
+        }
         
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
             return
@@ -260,14 +323,16 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         catch {
             print("Error occured \(error)")
         }
+        
         var ciImage = CIImage(cvPixelBuffer: pixelBuffer)
         // let transform = ciImage.orientationTransform(for: CGImagePropertyOrientation(rawValue: 6)!) // for normal orientation
         let transform = ciImage.orientationTransform(for: CGImagePropertyOrientation(rawValue: 3)!)
+        let transform4Save = ciImage.orientationTransform(for: CGImagePropertyOrientation(rawValue: 1)!)
         ciImage = ciImage.transformed(by: transform)
         
         // TODO: For saving images
         var imageCandidate = CIImage(cvPixelBuffer: pixelBuffer)
-        imageCandidate = imageCandidate.transformed(by: transform)
+        imageCandidate = imageCandidate.transformed(by: transform4Save)
         
         let size = ciImage.extent.size
         var recognizedText: String = ""
@@ -275,17 +340,9 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
             guard let rects = textObservation.characterBoxes else {
                 continue
             }
-            /*var xMin = CGFloat.greatestFiniteMagnitude
-            var xMax: CGFloat = 0
-            var yMin = CGFloat.greatestFiniteMagnitude
-            var yMax: CGFloat = 0*/
+            var iterator = 0
             for rect in rects {
-                
-                /*xMin = min(xMin, rect.bottomLeft.x)
-                xMax = max(xMax, rect.bottomRight.x)
-                yMin = min(yMin, rect.bottomRight.y)
-                yMax = max(yMax, rect.topRight.y)*/
-                
+                iterator += 1
                 let imageRect = CGRect(
                     x: rect.bottomLeft.x * size.width,
                     y: rect.bottomRight.y * size.height,
@@ -298,18 +355,18 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
                 let uiImage = UIImage(cgImage: cgImage)
                 tesseract?.image = uiImage
                 tesseract?.recognize()
+                // self.saveImage(image: (tesseract?.thresholdedImage)!, mock: false, name: "thr_image\(iterator).jpg")
+                // print("Number #\(iterator)")
+                // print(tesseract?.confidences(by: .symbol))
                 guard var text = tesseract?.recognizedText else {
                     continue
                 }
                 text = text.trimmingCharacters(in: CharacterSet.newlines)
-                text = replaceFalseOccurence(input: text)
                 if !text.isEmpty {
-                    recognizedText.append(text)
+                    recognizedText.append(replaceFalseOccurence(input: text))
                 }
-                
-                // TODO: For saving images
-                //saveImage(inputCI: imageCandidate, mock: false)
             }
+            //print("Iteration")
         }
         textObservations.removeAll()
         DispatchQueue.main.async {
@@ -325,17 +382,23 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
                 }
             }
             if (recognizedText.count > 0){
+                
+                // TODO: For saving images
+                self.saveImage(image: self.convert(cimage: imageCandidate), mock: false, name: "super_source_image.jpg")
+                
                 let textLayer = CATextLayer()
                 textLayer.backgroundColor = UIColor.clear.cgColor
                 let textRect = CGRect(
-                    origin: CGPoint(x: viewWidth * 0.02, y: viewHeight * 0.02),
-                    size: CGSize(width: viewWidth * 0.98, height: viewHeight * 33/128)
+                    origin: CGPoint(x: viewWidth * 0.02, y: viewHeight * 0.08),
+                    size: CGSize(width: viewWidth * 0.98, height: viewHeight * 0.1)
                 )
                 
                 textLayer.frame = textRect
                 textLayer.string = recognizedText
-                textLayer.foregroundColor = UIColor.green.cgColor
+                textLayer.foregroundColor = UIColor.yellow.cgColor
                 self.view.layer.addSublayer(textLayer)
+                
+                self.numberVerifier.addNumber(str: recognizedText)
             }
         }
     }

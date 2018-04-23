@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		02A061F155CAB9E367852191 /* Pods_ExciseRecognitioniOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE3596DFAD73D8EC40FB0FE7 /* Pods_ExciseRecognitioniOS.framework */; };
 		202486511F3AE20500CD12E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 202486501F3AE20500CD12E6 /* AppDelegate.swift */; };
 		202486531F3AE20500CD12E6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 202486521F3AE20500CD12E6 /* ViewController.swift */; };
 		202486561F3AE20500CD12E6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 202486541F3AE20500CD12E6 /* Main.storyboard */; };
@@ -16,10 +17,14 @@
 		204D7D111F3C327000209923 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20A7BF931F3B259800854C42 /* CoreImage.framework */; };
 		20A7BF891F3AE91200854C42 /* Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20A7BF881F3AE91200854C42 /* Preview.swift */; };
 		20A7BF911F3B257100854C42 /* TesseractOCR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20A7BF8C1F3B250A00854C42 /* TesseractOCR.framework */; };
+		44C6FC97208B45710026D543 /* ExciseStohasticVerifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44C6FC96208B45710026D543 /* ExciseStohasticVerifier.swift */; };
+		44C6FC99208B58B40026D543 /* extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44C6FC98208B58B40026D543 /* extension.swift */; };
+		44D552E2208BD197006C9A6C /* GPUImagePreprocessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D552E1208BD197006C9A6C /* GPUImagePreprocessing.swift */; };
 		64E9ADE81F2A2436007BAC6F /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = 64E9ADE71F2A2436007BAC6F /* tessdata */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		04D4C18B9AC4A6BD56B673F9 /* Pods-ExciseRecognitioniOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExciseRecognitioniOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-ExciseRecognitioniOS/Pods-ExciseRecognitioniOS.release.xcconfig"; sourceTree = "<group>"; };
 		2024864D1F3AE20500CD12E6 /* ExciseRecognitioniOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExciseRecognitioniOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		202486501F3AE20500CD12E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		202486521F3AE20500CD12E6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -32,7 +37,12 @@
 		20A7BF8D1F3B254F00854C42 /* ExciseRecognitioniOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ExciseRecognitioniOS-Bridging-Header.h"; sourceTree = "<group>"; };
 		20A7BF921F3B259100854C42 /* libstdc++.6.0.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.0.9.tbd"; path = "usr/lib/libstdc++.6.0.9.tbd"; sourceTree = SDKROOT; };
 		20A7BF931F3B259800854C42 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		44C6FC96208B45710026D543 /* ExciseStohasticVerifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExciseStohasticVerifier.swift; sourceTree = "<group>"; };
+		44C6FC98208B58B40026D543 /* extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extension.swift; sourceTree = "<group>"; };
+		44D552E1208BD197006C9A6C /* GPUImagePreprocessing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPUImagePreprocessing.swift; sourceTree = "<group>"; };
 		64E9ADE71F2A2436007BAC6F /* tessdata */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tessdata; sourceTree = "<group>"; };
+		BE3596DFAD73D8EC40FB0FE7 /* Pods_ExciseRecognitioniOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ExciseRecognitioniOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DEA4D572D68AA62E2DB62696 /* Pods-ExciseRecognitioniOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExciseRecognitioniOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ExciseRecognitioniOS/Pods-ExciseRecognitioniOS.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,6 +53,7 @@
 				20A7BF911F3B257100854C42 /* TesseractOCR.framework in Frameworks */,
 				204D7D111F3C327000209923 /* CoreImage.framework in Frameworks */,
 				204D7D101F3C326800209923 /* libstdc++.6.0.9.tbd in Frameworks */,
+				02A061F155CAB9E367852191 /* Pods_ExciseRecognitioniOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,6 +67,7 @@
 				2024864F1F3AE20500CD12E6 /* ExciseRecognitioniOS */,
 				2024864E1F3AE20500CD12E6 /* Products */,
 				20A7BF8A1F3B243800854C42 /* Frameworks */,
+				8899562BB5BF336264B4406C /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -72,6 +84,7 @@
 			children = (
 				64E9ADE71F2A2436007BAC6F /* tessdata */,
 				202486501F3AE20500CD12E6 /* AppDelegate.swift */,
+				44C6FC98208B58B40026D543 /* extension.swift */,
 				202486521F3AE20500CD12E6 /* ViewController.swift */,
 				202486541F3AE20500CD12E6 /* Main.storyboard */,
 				202486571F3AE20500CD12E6 /* Assets.xcassets */,
@@ -79,6 +92,8 @@
 				2024865C1F3AE20500CD12E6 /* Info.plist */,
 				20A7BF881F3AE91200854C42 /* Preview.swift */,
 				20A7BF8D1F3B254F00854C42 /* ExciseRecognitioniOS-Bridging-Header.h */,
+				44C6FC96208B45710026D543 /* ExciseStohasticVerifier.swift */,
+				44D552E1208BD197006C9A6C /* GPUImagePreprocessing.swift */,
 			);
 			path = ExciseRecognitioniOS;
 			sourceTree = "<group>";
@@ -88,8 +103,18 @@
 			children = (
 				20A7BF931F3B259800854C42 /* CoreImage.framework */,
 				20A7BF921F3B259100854C42 /* libstdc++.6.0.9.tbd */,
+				BE3596DFAD73D8EC40FB0FE7 /* Pods_ExciseRecognitioniOS.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8899562BB5BF336264B4406C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				DEA4D572D68AA62E2DB62696 /* Pods-ExciseRecognitioniOS.debug.xcconfig */,
+				04D4C18B9AC4A6BD56B673F9 /* Pods-ExciseRecognitioniOS.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -99,9 +124,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2024865F1F3AE20500CD12E6 /* Build configuration list for PBXNativeTarget "ExciseRecognitioniOS" */;
 			buildPhases = (
+				873095D0B8E03BAF388367A1 /* [CP] Check Pods Manifest.lock */,
 				202486491F3AE20500CD12E6 /* Sources */,
 				2024864A1F3AE20500CD12E6 /* Frameworks */,
 				2024864B1F3AE20500CD12E6 /* Resources */,
+				8863AFB5A5E5FDD9ADD5E454 /* [CP] Embed Pods Frameworks */,
+				AC13AAC2623417534699067A /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -161,6 +189,60 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		873095D0B8E03BAF388367A1 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ExciseRecognitioniOS-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8863AFB5A5E5FDD9ADD5E454 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-ExciseRecognitioniOS/Pods-ExciseRecognitioniOS-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GPUImage/GPUImage.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GPUImage.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ExciseRecognitioniOS/Pods-ExciseRecognitioniOS-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AC13AAC2623417534699067A /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ExciseRecognitioniOS/Pods-ExciseRecognitioniOS-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		202486491F3AE20500CD12E6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -169,6 +251,9 @@
 				202486531F3AE20500CD12E6 /* ViewController.swift in Sources */,
 				20A7BF891F3AE91200854C42 /* Preview.swift in Sources */,
 				202486511F3AE20500CD12E6 /* AppDelegate.swift in Sources */,
+				44D552E2208BD197006C9A6C /* GPUImagePreprocessing.swift in Sources */,
+				44C6FC99208B58B40026D543 /* extension.swift in Sources */,
+				44C6FC97208B45710026D543 /* ExciseStohasticVerifier.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -307,6 +392,7 @@
 		};
 		202486601F3AE20500CD12E6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DEA4D572D68AA62E2DB62696 /* Pods-ExciseRecognitioniOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -334,6 +420,7 @@
 		};
 		202486611F3AE20500CD12E6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 04D4C18B9AC4A6BD56B673F9 /* Pods-ExciseRecognitioniOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
