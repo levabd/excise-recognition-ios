@@ -1,6 +1,7 @@
 import AVFoundation
 import UIKit
 import Vision
+import CoreML
 //import GPUImage
 
 class ViewController: UIViewController, G8TesseractDelegate {
@@ -12,6 +13,8 @@ class ViewController: UIViewController, G8TesseractDelegate {
     private var recognizerEnabled = true
     private let session = AVCaptureSession()
     private let numberVerifier = ExciseStohasticVerifier(minimumCandidatesCount: 3, bottomProbabilityThreshold: 0.4)
+    
+    var recognizedText: String = ""
     
     /*func preprocessedImage(for tesseract: G8Tesseract?, sourceImage: UIImage?) -> UIImage? {
         // sourceImage is the same image you sent to Tesseract above
@@ -45,6 +48,7 @@ class ViewController: UIViewController, G8TesseractDelegate {
         // tesseract?.charWhitelist = "1234567890OoZzATSsgDpeBbGtaXq"
         tesseract?.charWhitelist = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890()-+*!/?.,@#$%&"
         //tesseract?.delegate = self
+        
         if isAuthorized() {
             configureTextDetection()
             configureCamera()
@@ -71,6 +75,31 @@ class ViewController: UIViewController, G8TesseractDelegate {
         // textDetectionRequest?.regionOfInterest = CGRect(x: (30 + 33)/128, y: 31/72, width: 33/128, height: 10/72)
         textDetectionRequest?.regionOfInterest = CGRect(x: 0.4921875, y: 0.430556, width: 0.2578125, height: 0.138889)
         textDetectionRequest!.reportCharacterBoxes = true
+    }
+    
+    //OCR-REQUEST
+    lazy var ocrRequest: VNCoreMLRequest = {
+        do {
+            //THIS MODEL IS TRAINED BY ME FOR FONT "Inconsolata" (Numbers 0...9 and UpperCase Characters A..Z)
+            let model = try VNCoreMLModel(for:OCR().model)
+            return VNCoreMLRequest(model: model, completionHandler: self.handleClassification)
+        } catch {
+            fatalError("cannot load model")
+        }
+    }()
+    
+    //OCR-HANDLER
+    func handleClassification(request: VNRequest, error: Error?)
+    {
+        guard let observations = request.results as? [VNClassificationObservation]
+            else {fatalError("unexpected result") }
+        guard let best = observations.first
+            else { fatalError("cant get best result")}
+        
+        var text = best.identifier.trimmingCharacters(in: CharacterSet.newlines)
+        if !text.isEmpty {
+            recognizedText.append(replaceFalseOccurence(input: text))
+        }
     }
     
     private func configureCamera() {
@@ -274,10 +303,11 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     func replaceFalseOccurence(input: String) -> String{
         // Required
         var resultString = input.replacingOccurrences(of: " ", with: "", options: .literal, range: nil)
+        resultString = resultString.replacingOccurrences(of: "O", with: "0", options: .literal, range: nil)
+        resultString = resultString.replacingOccurrences(of: "G", with: "6", options: .literal, range: nil)
         
         // Optional
-        /*resultString = resultString.replacingOccurrences(of: "O", with: "0", options: .literal, range: nil)
-        resultString = resultString.replacingOccurrences(of: "o", with: "0", options: .literal, range: nil)
+        /*resultString = resultString.replacingOccurrences(of: "o", with: "0", options: .literal, range: nil)
         resultString = resultString.replacingOccurrences(of: "Z", with: "7", options: .literal, range: nil)
         resultString = resultString.replacingOccurrences(of: "z", with: "7", options: .literal, range: nil)
         resultString = resultString.replacingOccurrences(of: "A", with: "4", options: .literal, range: nil)
@@ -290,7 +320,6 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         resultString = resultString.replacingOccurrences(of: "e", with: "8", options: .literal, range: nil)
         resultString = resultString.replacingOccurrences(of: "B", with: "8", options: .literal, range: nil)
         resultString = resultString.replacingOccurrences(of: "b", with: "6", options: .literal, range: nil)
-        resultString = resultString.replacingOccurrences(of: "G", with: "6", options: .literal, range: nil)
         
         // Very optional
         resultString = resultString.replacingOccurrences(of: "t", with: "1", options: .literal, range: nil)
@@ -326,16 +355,20 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         
         var ciImage = CIImage(cvPixelBuffer: pixelBuffer)
         // let transform = ciImage.orientationTransform(for: CGImagePropertyOrientation(rawValue: 6)!) // for normal orientation
-        let transform = ciImage.orientationTransform(for: CGImagePropertyOrientation(rawValue: 3)!)
+        let transform4Recognize = ciImage.orientationTransform(for: CGImagePropertyOrientation(rawValue: 3)!)
         let transform4Save = ciImage.orientationTransform(for: CGImagePropertyOrientation(rawValue: 1)!)
-        ciImage = ciImage.transformed(by: transform)
+        ciImage = ciImage.transformed(by: transform4Recognize)
+        
+        //NEEDED BECAUSE OF DIFFERENT SCALES
+        let transform = CGAffineTransform.identity.scaledBy(x: ciImage.extent.size.width, y: ciImage.extent.size.height)
         
         // TODO: For saving images
         var imageCandidate = CIImage(cvPixelBuffer: pixelBuffer)
         imageCandidate = imageCandidate.transformed(by: transform4Save)
         
         let size = ciImage.extent.size
-        var recognizedText: String = ""
+        recognizedText = ""
+        
         for textObservation in textObservations {
             guard let rects = textObservation.characterBoxes else {
                 continue
@@ -343,7 +376,8 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
             var iterator = 0
             for rect in rects {
                 iterator += 1
-                let imageRect = CGRect(
+                
+                /*let imageRect = CGRect(
                     x: rect.bottomLeft.x * size.width,
                     y: rect.bottomRight.y * size.height,
                     width: (rect.bottomRight.x - rect.bottomLeft.x) * size.width,
@@ -355,16 +389,48 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
                 let uiImage = UIImage(cgImage: cgImage)
                 tesseract?.image = uiImage
                 tesseract?.recognize()
+                
                 // self.saveImage(image: (tesseract?.thresholdedImage)!, mock: false, name: "thr_image\(iterator).jpg")
                 // print("Number #\(iterator)")
                 // print(tesseract?.confidences(by: .symbol))
+                
                 guard var text = tesseract?.recognizedText else {
                     continue
-                }
-                text = text.trimmingCharacters(in: CharacterSet.newlines)
-                if !text.isEmpty {
-                    recognizedText.append(replaceFalseOccurence(input: text))
-                }
+                } */
+                
+                //SCALE THE BOUNDING BOX TO PIXELS
+                let realBoundingBox = rect.boundingBox.applying(transform)
+                
+                //TO BE SURE
+                guard (ciImage.extent.contains(realBoundingBox))
+                    else { print("invalid detected rectangle"); return}
+                
+                //SCALE THE POINTS TO PIXELS
+                let topleft = rect.topLeft.applying(transform)
+                let topright = rect.topRight.applying(transform)
+                let bottomleft = rect.bottomLeft.applying(transform)
+                let bottomright = rect.bottomRight.applying(transform)
+                
+                //LET'S CROP AND RECTIFY
+                let charImage = ciImage
+                    .cropped(to: realBoundingBox)
+                    .applyingFilter("CIPerspectiveCorrection", parameters: [
+                        "inputTopLeft" : CIVector(cgPoint: topleft),
+                        "inputTopRight" : CIVector(cgPoint: topright),
+                        "inputBottomLeft" : CIVector(cgPoint: bottomleft),
+                        "inputBottomRight" : CIVector(cgPoint: bottomright)
+                        ])
+                
+                //PREPARE THE HANDLER
+                let handler = VNImageRequestHandler(ciImage: charImage, options: [:])
+                
+                //SOME OPTIONS (TO PLAY WITH..)
+                self.ocrRequest.imageCropAndScaleOption = VNImageCropAndScaleOption.scaleFill
+                
+                //FEED THE CHAR-IMAGE TO OUR OCR-REQUEST - NO NEED TO SCALE IT - VISION WILL DO IT FOR US !!
+                do {
+                    try handler.perform([self.ocrRequest])
+                }  catch { print("Error")}
             }
             //print("Iteration")
         }
@@ -381,10 +447,10 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
                     layer.removeFromSuperlayer()
                 }
             }
-            if (recognizedText.count > 0){
+            if (self.recognizedText.count > 0){
                 
                 // TODO: For saving images
-                self.saveImage(image: self.convert(cimage: imageCandidate), mock: false, name: "super_source_image.jpg")
+                // self.saveImage(image: self.convert(cimage: imageCandidate), mock: false, name: "super_source_image.jpg")
                 
                 let textLayer = CATextLayer()
                 textLayer.backgroundColor = UIColor.clear.cgColor
@@ -394,11 +460,11 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
                 )
                 
                 textLayer.frame = textRect
-                textLayer.string = recognizedText
+                textLayer.string = self.recognizedText
                 textLayer.foregroundColor = UIColor.yellow.cgColor
                 self.view.layer.addSublayer(textLayer)
                 
-                self.numberVerifier.addNumber(str: recognizedText)
+                self.numberVerifier.addNumber(str: self.recognizedText)
             }
         }
     }
