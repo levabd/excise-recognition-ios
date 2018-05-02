@@ -81,7 +81,8 @@ class ViewController: UIViewController, G8TesseractDelegate {
     lazy var ocrRequest: VNCoreMLRequest = {
         do {
             //THIS MODEL IS TRAINED BY ME FOR FONT "Inconsolata" (Numbers 0...9 and UpperCase Characters A..Z)
-            let model = try VNCoreMLModel(for:OCR().model)
+            // let model = try VNCoreMLModel(for:OCR().model)
+            let model = try VNCoreMLModel(for:Alphanum_28x28().model)
             return VNCoreMLRequest(model: model, completionHandler: self.handleClassification)
         } catch {
             fatalError("cannot load model")
