@@ -18,7 +18,6 @@
 		20A7BF891F3AE91200854C42 /* Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20A7BF881F3AE91200854C42 /* Preview.swift */; };
 		20A7BF911F3B257100854C42 /* TesseractOCR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20A7BF8C1F3B250A00854C42 /* TesseractOCR.framework */; };
 		446C9CE3209B5EBA00911C42 /* OCR.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 446C9CE2209B5EB900911C42 /* OCR.mlmodel */; };
-		4472685C209B8CCB00536A65 /* Alphanum_28x28.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 4472685B209B8CCB00536A65 /* Alphanum_28x28.mlmodel */; };
 		44C6FC97208B45710026D543 /* ExciseStohasticVerifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44C6FC96208B45710026D543 /* ExciseStohasticVerifier.swift */; };
 		44C6FC99208B58B40026D543 /* extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44C6FC98208B58B40026D543 /* extension.swift */; };
 		44D552E2208BD197006C9A6C /* GPUImagePreprocessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D552E1208BD197006C9A6C /* GPUImagePreprocessing.swift */; };
@@ -40,7 +39,6 @@
 		20A7BF921F3B259100854C42 /* libstdc++.6.0.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.0.9.tbd"; path = "usr/lib/libstdc++.6.0.9.tbd"; sourceTree = SDKROOT; };
 		20A7BF931F3B259800854C42 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		446C9CE2209B5EB900911C42 /* OCR.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = OCR.mlmodel; sourceTree = "<group>"; };
-		4472685B209B8CCB00536A65 /* Alphanum_28x28.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = Alphanum_28x28.mlmodel; sourceTree = "<group>"; };
 		44C6FC96208B45710026D543 /* ExciseStohasticVerifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExciseStohasticVerifier.swift; sourceTree = "<group>"; };
 		44C6FC98208B58B40026D543 /* extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extension.swift; sourceTree = "<group>"; };
 		44D552E1208BD197006C9A6C /* GPUImagePreprocessing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPUImagePreprocessing.swift; sourceTree = "<group>"; };
@@ -86,7 +84,6 @@
 		2024864F1F3AE20500CD12E6 /* ExciseRecognitioniOS */ = {
 			isa = PBXGroup;
 			children = (
-				4472685B209B8CCB00536A65 /* Alphanum_28x28.mlmodel */,
 				446C9CE2209B5EB900911C42 /* OCR.mlmodel */,
 				64E9ADE71F2A2436007BAC6F /* tessdata */,
 				202486501F3AE20500CD12E6 /* AppDelegate.swift */,
@@ -261,7 +258,6 @@
 				446C9CE3209B5EBA00911C42 /* OCR.mlmodel in Sources */,
 				44C6FC99208B58B40026D543 /* extension.swift in Sources */,
 				44C6FC97208B45710026D543 /* ExciseStohasticVerifier.swift in Sources */,
-				4472685C209B8CCB00536A65 /* Alphanum_28x28.mlmodel in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
